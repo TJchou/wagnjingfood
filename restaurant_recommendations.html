@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>望京美食推荐 - 一起炫饭吧</title>
+    <style>
+        :root {
+            --primary-color: #ff7043;
+            --secondary-color: #ffab91;
+            --accent-color: #ff5722;
+            --text-color: #333333;
+            --light-text: #757575;
+            --background-color: #f9f9f9;
+            --card-color: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+        
+        .location-info {
+            background-color: var(--card-color);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .location-info .icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .location-info .text {
+            flex-grow: 1;
+        }
+        
+        .location-info .distance {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .restaurant-card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .restaurant-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .cuisine-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .restaurant-info {
+            padding: 20px;
+        }
+        
+        .restaurant-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .restaurant-address {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .restaurant-address .icon {
+            margin-right: 5px;
+            min-width: 16px;
+        }
+        
+        .restaurant-features {
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .feature-tag {
+            background-color: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+        
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+        
+        .recommendation {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .restaurant-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .location-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .location-info .distance {
+                margin-top: 10px;
+            }
+        }
+        
+        /* 添加一些装饰元素 */
+        .decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: var(--secondary-color);
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .decoration-1 {
+            top: -30px;
+            left: 10%;
+            width: 150px;
+            height: 150px;
+        }
+        
+        .decoration-2 {
+            bottom: -50px;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="decoration decoration-1"></div>
+            <div class="decoration decoration-2"></div>
+            <div class="logo">一起炫饭吧</div>
+            <div class="subtitle">望京地区精选川湘粤餐厅推荐</div>
+        </header>
+        
+        <div class="location-info">
+            <div class="icon">📍</div>
+            <div class="text">
+                <p>推荐区域：兴苇北街4号院 与 锐创国际A座 之间</p>
+                <p>距离：约8.5公里</p>
+            </div>
+            <div class="distance">适合3人聚餐</div>
+        </div>
+        
+        <div class="restaurant-grid">
+            <!-- 餐厅1 -->
+            <div class="restaurant-card">
+                <div class="restaurant-image" style="background-image: url('https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')">
+                    <div class="cuisine-type">川菜</div>
+                </div>
+                <div class="restaurant-info">
+                    <h2 class="restaurant-name">望京一号</h2>
+                    <div class="restaurant-address">
+                        <span class="icon">🏠</span>
+                        <span>大望京村一号（京顺路进京方向五环入口辅路150米）</span>
+                    </div>
+                    <div class="restaurant-features">
+                        <div class="feature-title">特色菜</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">水煮鱼</span>
+                            <span class="feature-tag">花椒鸡</span>
+                            <span class="feature-tag">川北凉粉</span>
+                        </div>
+                    </div>
+                    <div class="price">¥90/人</div>
+                    <p class="recommendation">这是望京地区知名的川菜餐厅，位于四合院内，环境独特，菜品麻辣鲜香，特别是花椒鸡，麻味中透着香，入口咸鲜，回味甘甜。</p>
+                </div>
+            </div>
+            
+            <!-- 餐厅2 -->
+              <div class="restaurant-card">
+                 <div class="restaurant-image" style="background-image: url('https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80')">
+                     <div class="cuisine-type">川菜</div>
+                 </div>
+                <div class="restaurant-info">
+                    <h2 class="restaurant-name">老郭川菜（望京店）</h2>
+                    <div class="restaurant-address">
+                        <span class="icon">🏠</span>
+                        <span>望京SOHO塔1-B座1层</span>
+                    </div>
+                    <div class="restaurant-features">
+                        <div class="feature-title">特色菜</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">麻婆豆腐</span>
+                            <span class="feature-tag">回锅肉</span>
+                            <span class="feature-tag">辣子鸡</span>
+                        </div>
+                    </div>
+                    <div class="price">¥75/人</div>
+                    <p class="recommendation">这家餐厅的麻婆豆腐做得非常地道，豆腐嫩滑，麻辣适中，回锅肉肥而不腻，是不少川菜爱好者的首选。</p>
+                </div>
+            </div>
+            
+            <!-- 餐厅3 -->
+              <div class="restaurant-card">
+                 <div class="restaurant-image" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')">
+                     <div class="cuisine-type">川湘菜</div>
+                 </div>
+                <div class="restaurant-info">
+                    <h2 class="restaurant-name">川老伯·川湘菜（望京店）</h2>
+                    <div class="restaurant-address">
+                        <span class="icon">🏠</span>
+                        <span>望京街9号万科时代中心F1层</span>
+                    </div>
+                    <div class="restaurant-features">
+                        <div class="feature-title">特色菜</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">剁椒鱼头</span>
+                            <span class="feature-tag">辣子鸡</span>
+                            <span class="feature-tag">毛血旺</span>
+                        </div>
+                    </div>
+                    <div class="price">¥90/人</div>
+                    <p class="recommendation">结合了川菜和湘菜的特色，既有川菜的麻辣，又有湘菜的香辣，菜品选择多样。</p>
+                </div>
+            </div>
+            
+            <!-- 餐厅4 -->
+              <div class="restaurant-card">
+                 <div class="restaurant-image" style="background-image: url('https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80')">
+                     <div class="cuisine-type">粤菜</div>
+                 </div>
+                <div class="restaurant-info">
+                    <h2 class="restaurant-name">星粤（望京店）</h2>
+                    <div class="restaurant-address">
+                        <span class="icon">🏠</span>
+                        <span>望京SOHO塔1二层1210</span>
+                    </div>
+                    <div class="restaurant-features">
+                        <div class="feature-title">特色菜</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">烧腊</span>
+                            <span class="feature-tag">点心</span>
+                            <span class="feature-tag">海鲜</span>
+                        </div>
+                    </div>
+                    <div class="price">¥120/人</div>
+                    <p class="recommendation">正宗粤菜，食材新鲜，烹饪技法讲究，口味清淡鲜美，适合喜欢粤菜的朋友。</p>
+                </div>
+            </div>
+            
+            <!-- 餐厅5 -->
+              <div class="restaurant-card">
+                 <div class="restaurant-image" style="background-image: url('https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')">
+                     <div class="cuisine-type">粤菜</div>
+                 </div>
+                <div class="restaurant-info">
+                    <h2 class="restaurant-name">粤界（望京金辉店）</h2>
+                    <div class="restaurant-address">
+                        <span class="icon">🏠</span>
+                        <span>崔各庄镇启阳路金辉大厦二楼（望京东地铁站B东北口旁）</span>
+                    </div>
+                    <div class="restaurant-features">
+                        <div class="feature-title">特色菜</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">烧腊</span>
+                            <span class="feature-tag">粥品</span>
+                            <span class="feature-tag">海鲜</span>
+                        </div>
+                    </div>
+                    <div class="price">¥100/人</div>
+                    <p class="recommendation">提供正宗的广东风味，环境舒适，服务周到，交通便利，位于地铁站附近。</p>
+                </div>
+            </div>
+            
+            <!-- 餐厅6 -->
+               <div class="restaurant-card">
+                  <div class="restaurant-image" style="background-image: url('https://images.unsplash.com/photo-1614531341773-3bff8b7cb3fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80')">
+                      <div class="cuisine-type">川菜</div>
+                  </div>
+                 <div class="restaurant-info">
+                     <h2 class="restaurant-name">铭辛阁川菜·水煮鱼</h2>
+                    <div class="restaurant-address">
+                        <span class="icon">🏠</span>
+                        <span>望京SOHO下沉广场1017商铺</span>
+                    </div>
+                    <div class="restaurant-features">
+                        <div class="feature-title">特色菜</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">水煮鱼</span>
+                            <span class="feature-tag">麻婆豆腐</span>
+                            <span class="feature-tag">回锅肉</span>
+                        </div>
+                    </div>
+                    <div class="price">¥70/人</div>
+                    <p class="recommendation">以水煮鱼为招牌，鱼肉鲜嫩，汤底麻辣鲜香，价格实惠，位于望京SOHO，交通便利。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2024 一起炫饭吧 - 望京美食推荐</p>
+        <p>数据来源：网络整理，仅供参考</p>
+    </footer>
+    
+    <!-- 移除了展开按钮相关的JavaScript代码 -->
+</body>
+</html>
